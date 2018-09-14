@@ -1,6 +1,6 @@
 $(function() {
 
-    Morris.Area({
+   /* Morris.Area({
         element: 'morris-area-chart',
         data: [{
             period: '2010 Q1',
@@ -59,58 +59,40 @@ $(function() {
         pointSize: 2,
         hideHover: 'auto',
         resize: true
-    });
+    });*/
 
-    Morris.Donut({
-        element: 'morris-donut-chart',
+    morrisBar = Morris.Bar({
+        element: 'morris-bar-chart',
         data: [{
-            label: "Download Sales",
-            value: 12
-        }, {
-            label: "In-Store Sales",
-            value: 30
-        }, {
-            label: "Mail-Order Sales",
-            value: 20
+            operating_year: '',
+            SUM_RESULT_YEAR: 0
         }],
+        xkey: 'operating_year',
+        ykeys: ['SUM_RESULT_YEAR'],
+        labels: ['ผลประกอบการ'],
+        hideHover: 'auto',
         resize: true
     });
 
-    Morris.Bar({
-        element: 'morris-bar-chart',
+    morrisLine = Morris.Line({
+        element: 'morris-line-chart',
         data: [{
-            y: '2006',
-            a: 100,
-            b: 90
-        }, {
-            y: '2007',
-            a: 75,
-            b: 65
-        }, {
-            y: '2008',
-            a: 50,
-            b: 40
-        }, {
-            y: '2009',
-            a: 75,
-            b: 65
-        }, {
-            y: '2010',
-            a: 50,
-            b: 40
-        }, {
-            y: '2011',
-            a: 75,
-            b: 65
-        }, {
-            y: '2012',
-            a: 100,
-            b: 90
+            operating_year: '',
+            SUM_RESULT_YEAR: 0
         }],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
+        xkey: 'operating_year',
+        ykeys: ['SUM_RESULT_YEAR'],
+        labels: ['ผลประกอบการ'],
         hideHover: 'auto',
+        resize: true
+    });
+
+    morrisDonut = Morris.Donut({
+        element: 'morris-donut-chart',
+        data: [{
+            label: "",
+            value: 0
+        }],
         resize: true
     });
     

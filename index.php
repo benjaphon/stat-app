@@ -4,6 +4,7 @@ session_start();
 /*
  * include file start
  */
+include 'vendor/autoload.php';
 require 'vendor/library/core.php';
 require 'vendor/library/cons.php';
 require 'vendor/library/database.php';
@@ -14,7 +15,7 @@ $baseUrl = base_url();
 $basePath = base_path();
 $title = 'Stat App';
 
-$onpage = isset($_GET['onpage']) ? $_GET['onpage'] : "back";
+$onpage = isset($_GET['onpage']) ? $_GET['onpage'] : "front";
 $url = isset($_GET['url']) ? $_GET['url'] : "home";
 $a = isset($_GET['a']) ? $_GET['a'] : "index";
 

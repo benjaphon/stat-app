@@ -45,6 +45,10 @@ class database {
         return mysqli_num_rows($query);
     }
 
+    function point($query, $order) {
+        return mysqli_data_seek($query, $order);
+    }
+
     function update($table = null, $array_of_values = array(), $conditions = 'FALSE') {
         if ($table === null || empty($array_of_values))
             return false;

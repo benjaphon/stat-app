@@ -4,9 +4,9 @@ RewriteBase /4F2OMJUW/
 RewriteRule ^(front|back)/(.*)/(.*)/(.*)$ index.php?onpage=$1&url=$2&a=$3&id=$4 [L,QSA]
 RewriteRule ^(front|back)/(.*)/(.*)$ index.php?onpage=$1&url=$2&a=$3 [L,QSA]
 RewriteRule ^(front|back)/(.*)$ index.php?onpage=$1&url=$2&a=index [L,QSA]
-RewriteRule ^(front|back)$ index.php?onpage=$1&url=home&a=index [L,QSA]
+RewriteRule ^(front|back)$ index.php?onpage=$1&url=graph&a=index [L,QSA]
 #back
-RewriteRule ^admin$ index.php?onpage=back&url=home&a=index [L,QSA]
+RewriteRule ^admin$ index.php?onpage=back&url=graph&a=index [L,QSA]
 #view product
 RewriteRule ^product/(.*)/(.*)$ index.php?onpage=front&url=product&a=$1&id=$2 [L,QSA]
 #all product

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        header('location:'.$baseUrl.'/back/home/index');
+        header('location:'.$baseUrl.'/back/graph/index');
     }else{
         header('location:'.$baseUrl.'/back/user/login');
     }

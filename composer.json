@@ -1,0 +1,6 @@
+{
+    
+    "require": {
+        "nnnick/chartjs": "^2.7"
+    }
+}
