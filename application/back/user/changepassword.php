@@ -26,7 +26,7 @@ $title = 'เปลี่ยนรหัสผ่าน : ' . $rs_user['username
 /*
  * header***********************************************************************
  */
-require 'template/back/header.php';
+require 'dist/template/back/header.php';
 /*
  * header***********************************************************************
  */
@@ -112,7 +112,7 @@ require 'template/back/header.php';
 /*
  * footer***********************************************************************
  */
-require 'template/back/footer.php';
+require 'dist/template/back/footer.php';
 /*
  * footer***********************************************************************
  */

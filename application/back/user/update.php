@@ -3,15 +3,14 @@
  * php code///////////**********************************************************
  */
 $db = new database();
-$option_user = array(
-    "table" => "users",
-    "condition" => "id='{$_GET['id']}'"
+
+$option = array(
+    'table' => 'users',
+    'condition' => "id={$_GET['id']}"
 );
-$query_user = $db->select($option_user);
-$rs_user = $db->get($query_user);
 
-
-$title = 'แก้ไขผู้ใช้งาน : ' . $rs_user['username'];
+$query = $db->select($option);
+$row = $db->get($query);
 /*
  * php code///////////**********************************************************
  */
@@ -19,119 +18,174 @@ $title = 'แก้ไขผู้ใช้งาน : ' . $rs_user['username'];
 /*
  * header***********************************************************************
  */
-require 'template/back/header.php';
+require 'dist/template/back/header.php';
 /*
  * header***********************************************************************
  */
 ?>
-<script type="text/javascript" src="<?php echo $baseUrl; ?>/js/jquery.form-validator.min.js"></script>
-<div id="page-warpper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">แก้ไขข้อมูล <?php echo $rs_user['username']; ?></h1>
-        </div>
+
+<!--style for this page-->
+
+<!-- Bootstrap Select CSS -->
+<link href="<?php echo $baseUrl; ?>/vendor/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+
+<!-- **********************************************************************************************************************************************************
+MAIN CONTENT
+*********************************************************************************************************************************************************** -->
+<!--main content start-->  
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Update User</h1>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="subhead">
-                <a role="button" id="save" class="btn btn-success btn-xs new-data" href="#">
-                    <i class="glyphicon glyphicon-floppy-save"></i>
-                    Save
-                </a>
-                <a role="button" class="search-button btn btn-default btn-xs" href="<?php echo $baseUrl; ?>/back/user">
-                    <i class="glyphicon glyphicon-remove-circle"></i>
-                    Cancel
-                </a>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-6">
+        <form action="<?php echo $baseUrl; ?>/back/user/form_update" method="post">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="form-group">
+                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                        <label for="username">Username</label>
+                        <input class="form-control" maxlength="50" name="username" type="text" value="<?php echo $row['username']; ?>" autocomplete="off" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="old_password">Old Password</label>
+                        <input class="form-control" maxlength="50" name="old_password" type="password" autocomplete="off" />
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input class="form-control" maxlength="50" name="new_password" type="password" autocomplete="off" />
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password_confirm">New Password Confirm</label>
+                        <input class="form-control" maxlength="50" name="new_password_confirm" type="password" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>User Type</label>
+                        <select class="form-control" name="user_type">
+                            <option value='admin'>Admin</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="panel-footer">
+                    <a id="save" class="btn btn-success">
+                        <i class="glyphicon glyphicon-floppy-save"></i>
+                        Save
+                    </a>
+                    <a class="btn btn-default" href="<?php echo $baseUrl; ?>/back/user">
+                        <i class="glyphicon glyphicon-remove-circle"></i>
+                        Cancel
+                    </a>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="form-horizontal" style="margin-top: 10px;">
-                <form id="user-form" action="<?php echo $baseUrl; ?>/back/user/form_update/<?php echo $rs_user['id']; ?>" method="post">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label required" for="User_firstname">ชื่อจริง <span class="required">*</span></label>
-                        <div class="col-sm-4">
-                            <input maxlength="100" class="form-control input-sm" name="firstname" id="firstname" type="text" value="<?php echo $rs_user['firstname'];?>" data-validation="required" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label required" for="User_lastname">นามสกุล <span class="required">*</span></label>
-                        <div class="col-sm-4">
-                            <input maxlength="100" class="form-control input-sm" name="lastname" id="lastname" type="text" value="<?php echo $rs_user['lastname'];?>" data-validation="required" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label required" for="User_username">Username <span class="required">*</span></label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="50" name="username" id="username" type="text" value="<?php echo $rs_user['username'];?>" data-validation="required" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_email">อีเมล์</label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="100" name="email" id="email" type="text" value="<?php echo $rs_user['email'];?>" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_phone">โทรศัพท์</label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="20" name="phone" id="phone" type="text" value="<?php echo $rs_user['phone'];?>" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_address">ที่อยู่</label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="200" name="address" id="address" type="text" value="<?php echo $rs_user['address'];?>" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_district">อำเภอ</label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="100" name="district" id="district" type="text" value="<?php echo $rs_user['district'];?>" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_province">จังหวัด</label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="100" name="province" id="province" type="text" value="<?php echo $rs_user['province'];?>" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_postcode">รหัสไปรษณีย์</label>
-                        <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="5" name="postcode" id="postcode" type="text" value="<?php echo $rs_user['postcode'];?>" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="User_user_type">ประเภทสมาชิก</label>
-                        <div class="col-sm-4">
-                            <select class="form-control input-sm" name="user_type" id="user_type">
-                                <option value="user">ผู้ใช้ทั่วไป</option>
-                                <option value="admin">ผู้ดูแลระบบ</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#save").click(function() {
-            $("#user-form").submit();
-            return false;
-        });
-        $("#user_type").val("<?php echo $rs_user['user_type']; ?>")
-    });
-    $.validate();
-</script>
+                
+
+<!--main content end-->
+
 <?php
 /*
  * footer***********************************************************************
  */
-require 'template/back/footer.php';
+require 'dist/template/back/footer.php';
 /*
  * footer***********************************************************************
  */
+
+ ?>
+
+<!--script for this page-->
+
+<!-- Bootstrap Core JavaScript -->
+<script src="<?php echo $baseUrl; ?>/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+<script>
+$(document).ready(function(){
+
+    $("#save").click(function(e){
+        e.preventDefault();
+        $form = $("form");
+
+        $.post("<?php echo $baseUrl; ?>/back/user/check_user", $form.serialize(), function(data){
+            if(data.status){
+                 
+                if($("input[name='old_password']").val()){
+
+                //validate
+                $.post("<?php echo $baseUrl; ?>/back/user/check_old_password", $form.serialize(), function(data){
+                    if(data=='true'){
+
+                        if( ($("input[name='new_password']").val() == "") || ($("input[name='new_password_confirm']").val() == "") ){
+                            swal("Error!", "กรุณาระบุ password ใหม่", "error");
+                            return false;
+                        }
+
+                        if( $("input[name='new_password']").val() != $("input[name='new_password_confirm']").val() ){
+                            swal("Error!", "password ไม่ตรงกัน", "error");
+                            return false;
+                        }
+
+                         $.post($form.attr('action'), $form.serialize(), function(data){
+                    
+                            if(data.status){
+                                swal({
+                                    title: "Good job!", 
+                                    text: "Save Success!", 
+                                    type: "success"
+                                }, function() {
+                                    window.location.replace("<?php echo $baseUrl ?>/back/user");
+                                });
+                            } else {
+                                swal("Save Fail!", data.msg, "error");
+                            };
+                        }, "json");
+                        
+                        
+                    } else {
+                        swal("Error!", "password ไม่ถูกต้อง", "error");
+                        return false;
+                    };
+                });
+                } else {
+
+                    $.post($form.attr('action'), $form.serialize(), function(data){
+                    
+                        if(data.status){
+                            swal({
+                                title: "Good job!", 
+                                text: "Save Success!", 
+                                type: "success"
+                            }, function() {
+                                window.location.replace("<?php echo $baseUrl ?>/back/user");
+                            });
+                        } else {
+                            swal("Save Fail!", data.msg, "error");
+                        };
+                    }, "json");
+
+                };
+
+            } else {
+                swal("Save Fail!", data.msg, "error");
+            };
+            
+        }, "json");
+
+        
+
+    });
+
+    $("select[username='user_type']").val("<?php echo $row['user_type']; ?>");
+});
+
+</script>
+
+

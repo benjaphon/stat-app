@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $values = array(
         "name" => trim($_POST['subject_name']),
         "chart_type" => trim($_POST['chart_type']),
+        "description" => trim($_POST['description']),
         "modified_by" => $_SESSION[_ss . 'id'],
         "modified_at" => date('Y-m-d H:i:s')
     );

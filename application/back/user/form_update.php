@@ -1,21 +1,18 @@
 <?php
-$db = new database();
-$value_user = array(
-    "firstname" => trim($_POST['firstname']),
-    "lastname" => trim($_POST['lastname']),
-    "username" => trim($_POST['username']),
-    "email" => trim($_POST['email']),
-    "phone" => trim($_POST['phone']),
-    "address" => trim($_POST['address']),
-    "district" => trim($_POST['district']),
-    "province" => trim($_POST['province']),
-    "postcode" => trim($_POST['postcode']),
-    "user_type" => trim($_POST['user_type'])
-);
-$con_user = "id='{$_GET['id']}'";
-$query_user = $db->update("users", $value_user, $con_user);
 
-if($query_user == TRUE){
-    header("location:" . $baseUrl . "/back/user");
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+    $db = new database();
+    $password = salt_pass($_POST['new_password']);
+    $value = array(
+        "username" => trim($_POST['username']),
+        "password" => $password,
+        "user_type" => trim($_POST['user_type'])
+    );
+    $query = $db->update("users", $value, "id='{$_POST['id']}'");
+    if ($query) {
+        echo json_encode(array("status"=>true));
+    }else{
+        echo json_encode(array("status"=>false, "msg"=>"บันทึกไม่สำเร็จ"));
+    }
 }
-mysql_close();

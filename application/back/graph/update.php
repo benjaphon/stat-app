@@ -90,6 +90,11 @@ MAIN CONTENT
                             <option value='วงกลม'>วงกลม</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" rows="5" name="description"><?php echo $row_subject['description']; ?></textarea>
+                    </div>
              
                 </div>
                 <div class="panel-footer">

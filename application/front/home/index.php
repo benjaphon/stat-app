@@ -4,7 +4,8 @@
  */
 $db = new database();
 $option = array(
-    "table" => "subject"
+    "table" => "subject",
+    "order" => "id DESC"
 );
 $query = $db->select($option);
 
@@ -61,9 +62,15 @@ MAIN CONTENT
     <link href="<?php echo $baseUrl; ?>/vendor/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
 <style>
 
+#logo {
+    margin-bottom: 20px;
+}
+
 #banner img {
     width: 100%;
 }
+
+.page-header {}
 
 footer {
     min-height: 100px;
@@ -72,18 +79,26 @@ footer {
 }
 
 footer .footer-copyright {
-    line-height: 100px;
+    padding: 50px 0;
 }
 
-.form-control{
-  -webkit-border-radius: 1rem;
-     -moz-border-radius: 1rem;
-          border-radius: 1rem;
+.form-control, .btn{
+  -webkit-border-radius: 3rem;
+     -moz-border-radius: 3rem;
+          border-radius: 3rem;
+}
+
+.description {
+    padding-top: 20px;
 }
 
 .vertical-middle{
     display: flex;
     align-items: center;
+}
+
+.graph-collapse {
+    display: none;
 }
 
 </style>
@@ -95,14 +110,14 @@ footer .footer-copyright {
     </nav>
     <header>
         <div class="row">
-            <div class="col-lg-12">
-                <h1 style="text-align:center;">LOGO</h1>
+            <div id="logo" class="col-lg-12 text-center">
+                <img src="dist/img/logo.png" alt="logo">
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <div id="banner">
-                    <img src="dist/img/financial-banner.jpg" alt="banner">
+                    <img src="dist/img/banner.jpg" alt="banner">
                 </div>
             </div>
         </div>
@@ -110,34 +125,37 @@ footer .footer-copyright {
     <div class="page-header text-center">
         <h1>สถิติที่ SME ต้องรู้</h1>
     </div>
-    <div class="row">
+
+    <?php 
+        $i = 0;
+        while ($row_subject = $db->get($query)){
+            $i += 1;
+            $db->point($query_geo, 0);
+            $db->point($query_province, 0);
+    ?>
+
+    <div class="row <?php echo ($i > 5)?"graph-collapse":""; ?> ">
         <div class="col-lg-12">
-        <?php while ($row_subject = $db->get($query)){ 
-                $db->point($query_geo, 0);
-                $db->point($query_province, 0);
-        ?>
+        
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <div class="row vertical-middle">
-                        <div class="col-md-2">
-                            <h3 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse-<?php echo $row_subject['id']; ?>"><?php echo $row_subject['name']; ?></a>
-                            </h3>
+                    <a data-toggle="collapse" href="#collapse-<?php echo $row_subject['id']; ?>">
+                        <div class="row vertical-middle">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <h3 class="panel-title">
+                                        <?php echo $row_subject['name']; ?>
+                                        <i style="float: right;" class="fa fa-long-arrow-right"></i>
+                                    </h3>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-2 col-md-offset-8">
-                            <select class="form-control text-right" name="chart_type">
-                                <option value='แท่ง' <?php echo ($row_subject['chart_type']=="แท่ง")?"selected='selected'":''; ?> >แท่ง</option>
-                                <option value='แท่ง (แนวนอน)' <?php echo ($row_subject['chart_type']=="แท่ง (แนวนอน)")?"selected='selected'":''; ?> >แท่ง (แนวนอน)</option>
-                                <option value='เส้น' <?php echo ($row_subject['chart_type']=="เส้น")?"selected='selected'":''; ?> >เส้น</option>
-                                <option value='วงกลม' <?php echo ($row_subject['chart_type']=="วงกลม")?"selected='selected'":''; ?> >วงกลม</option>
-                            </select>
-                        </div>
-                    </div>
+                    </a>
                 </div>
                 <div id="collapse-<?php echo $row_subject['id']; ?>" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <input type="hidden" name="subject_id" value="<?php echo $row_subject['id']; ?>">
                                     <select class="form-control selectpicker" name="geography">
@@ -148,7 +166,7 @@ footer .footer-copyright {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <select class="form-control selectpicker" data-live-search="true" name="province">
                                         <option value="0" selected="selected">None</option>
@@ -158,12 +176,22 @@ footer .footer-copyright {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <input class="form-control" type="text" maxlength="4" name="year" placeholder="พ.ศ." required/>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <select class="form-control text-right" name="chart_type">
+                                        <option value='แท่ง' <?php echo ($row_subject['chart_type']=="แท่ง")?"selected='selected'":''; ?> >แท่ง</option>
+                                        <option value='แท่ง (แนวนอน)' <?php echo ($row_subject['chart_type']=="แท่ง (แนวนอน)")?"selected='selected'":''; ?> >แท่ง (แนวนอน)</option>
+                                        <option value='เส้น' <?php echo ($row_subject['chart_type']=="เส้น")?"selected='selected'":''; ?> >เส้น</option>
+                                        <option value='วงกลม' <?php echo ($row_subject['chart_type']=="วงกลม")?"selected='selected'":''; ?> >วงกลม</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <button type="button" name="filter" class="btn btn-block btn-primary">Filter</button>
                                 </div>
@@ -176,16 +204,26 @@ footer .footer-copyright {
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row description">
                             <div class="col-lg-12">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                <p><?php echo $row_subject['description']; ?></p>
                             </div>
                         </div>
                         
                     </div>
                 </div>
             </div>
-        <?php } ?>
+
+        </div>
+    </div>
+
+    <?php } ?>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group text-center">
+                <button type="button" id="btn_graph_collapse" class="btn btn-lg btn-default">ดูเพิ่มเติม</button>
+            </div>
         </div>
     </div>
 
@@ -194,8 +232,7 @@ footer .footer-copyright {
 
   <!-- Copyright -->
   <div class="footer-copyright text-center py-3">
-    © 2018 Copyright:
-    <a href="http://borbaimai.com"> Borbaimai.com</a>
+    © 2018 บริษัทจัดการโดย สำนักงานส่งเสริมวิสาหกิจขนาดกลางและขนาดย่อม (สสว.)
   </div>
   <!-- Copyright -->
 
@@ -305,6 +342,10 @@ footer .footer-copyright {
         
         initChart();
 
+        $( "#btn_graph_collapse" ).click(function(){
+            $( ".graph-collapse:lt(5)" ).show("slow").removeClass("graph-collapse");
+        });
+
         $( "select[name='geography']" ).change(function () {
             var geoID = $(this).val();
             var parent = $(this).parents(".panel");
@@ -341,7 +382,7 @@ footer .footer-copyright {
             var year = parent.find("input[name='year']").val();
             var type = parent.find("select[name='chart_type']").val();
             var chartType = realChartType(type);
-            
+
             $.post( "<?php echo $baseUrl; ?>/front/home/form-select-data", { subject_id: id, geo_id: geo_id, province_id: province_id, year: year }, function(result){
                 
                 myBarChart[id].destroy();
@@ -350,10 +391,17 @@ footer .footer-copyright {
                     datasets: [{
                         label: "ผลประกอบการ",
                         backgroundColor: "#337ab7",
+                        fill: false,
                         data: result.SUM_RESULT_YEAR,
                     }]
                 };
+
+                if (chartType=="line") {
+                    data.datasets[0].borderColor = "#337ab7";
+                }
+                
                 myBarChart[id] = createChart(ctx,chartType,data,initOptions)
+                console.log(myBarChart[id]);
 
             }, "json");
         });
@@ -367,6 +415,12 @@ footer .footer-copyright {
             var chartType = realChartType(type);
             var data = myBarChart[id].data;
             
+            if (chartType=="line") {
+                data.datasets[0].borderColor = "#337ab7";
+            }else{
+                delete data.datasets[0].borderColor;
+            }
+            console.log(data);
             myBarChart[id].destroy();
             myBarChart[id] = createChart(ctx,chartType,data,initOptions)
         });

@@ -79,6 +79,9 @@
                         <li>
                             <a href="<?php echo $baseUrl; ?>/back/graph/index"><i class="fa fa-bar-chart-o fa-fw"></i> Graph</a>
                         </li>
+                        <li>
+                            <a href="<?php echo $baseUrl; ?>/back/user/index"><i class="fa fa-users"></i> User</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
